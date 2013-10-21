@@ -55,73 +55,61 @@
             return new Flash(options);
         };
 
-        Object.defineProperty(this, 'success', {
-            get: function () {
-                return _success;
-            },
-            set: function (message) {
+        this.success = function (message) {
+            if (message) {
                 _success = message;
                 _type = 'success';
                 _notify(_type, message);
+            } else {
+                return _success;
             }
-        });
+        };
 
-        Object.defineProperty(this, 'info', {
-            get: function () {
-                return _info;
-            },
-            set: function (message) {
-                _info = message;
+        this.info = function (message) {
+            if (message) {
+                _success = message;
                 _type = 'info';
                 _notify(_type, message);
+            } else {
+                return _info;
             }
-        });
+        };
 
-        Object.defineProperty(this, 'warn', {
-            get: function () {
-                return _warn;
-            },
-            set: function (message) {
-                _warn = message;
+        this.warn = function (message) {
+            if (message) {
+                _success = message;
                 _type = 'warn';
                 _notify(_type, message);
+            } else {
+                return _warn;
             }
-        });
+        };
 
-        Object.defineProperty(this, 'error', {
-            get: function () {
-                return _error;
-            },
-            set: function (message) {
-                _error = message;
+        this.error = function (message) {
+            if (message) {
+                _success = message;
                 _type = 'error';
                 _notify(_type, message);
+            } else {
+                return _error;
             }
-        });
+        };
 
-        Object.defineProperty(this, 'type', {
-            get: function () {
-                return _type;
-            }
-        });
+        this.type = function () {
+            return _type;
+        };
 
-        Object.defineProperty(this, 'message', {
-            get: function () {
-                return _type ? _self[_type] : null;
-            }
-        });
+        this.message = function () {
+            return _type ? _self[_type] : null;
+        };
 
-        Object.defineProperty(this, 'classnames', {
-            get: function () {
-                return _options.classnames;
-            }
-        });
+        this.classnames = function () {
+            return _options.classnames;
+        };
 
-        Object.defineProperty(this, 'id', {
-            get: function () {
-                return _options.id;
-            }
-        });
+        this.id = function () {
+            return _options.id;
+        };
     };
 
     angular.module('angular-flash.service', [])
