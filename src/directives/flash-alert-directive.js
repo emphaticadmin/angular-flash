@@ -31,7 +31,7 @@
                 });
 
                 function removeAlertClasses() {
-                    var classnames = [].concat(flash.classnames.error, flash.classnames.warn, flash.classnames.info, flash.classnames.success);
+                    var classnames = [].concat(flash.classnames().error, flash.classnames().warn, flash.classnames().info, flash.classnames().success);
                     angular.forEach(classnames, function (clazz) {
                         element.removeClass(clazz);
                     });
@@ -45,7 +45,7 @@
                     $scope.flash.type = type;
                     $scope.flash.message = message;
                     removeAlertClasses();
-                    angular.forEach(flash.classnames[type], function (clazz) {
+                    angular.forEach(flash.classnames()[type], function (clazz) {
                         element.addClass(clazz);
                     });
 
@@ -69,8 +69,8 @@
                     show(flash[attr.flashAlert], attr.flashAlert);
                 }
 
-                if (!attr.flashAlert && flash.message) {
-                    show(flash.message, flash.type);
+                if (!attr.flashAlert && flash.message()) {
+                    show(flash.message(), flash.type());
                 }
 
             }
