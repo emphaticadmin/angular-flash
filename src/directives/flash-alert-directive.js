@@ -65,8 +65,8 @@
                  * Fixes timing issues: display the last flash message sent before this directive subscribed.
                  */
 
-                if (attr.flashAlert && flash[attr.flashAlert]) {
-                    show(flash[attr.flashAlert], attr.flashAlert);
+                if (attr.flashAlert && flash[attr.flashAlert]()) {
+                    show(flash[attr.flashAlert](), attr.flashAlert);
                 }
 
                 if (!attr.flashAlert && flash.message()) {
