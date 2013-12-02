@@ -56,7 +56,7 @@
         };
 
         this.success = function (message) {
-            if (message) {
+            if (angular.isDefined(message)) {
                 _success = message;
                 _type = 'success';
                 _notify(_type, message);
@@ -66,7 +66,7 @@
         };
 
         this.info = function (message) {
-            if (message) {
+            if (angular.isDefined(message)) {
                 _success = message;
                 _type = 'info';
                 _notify(_type, message);
@@ -76,7 +76,7 @@
         };
 
         this.warn = function (message) {
-            if (message) {
+            if (angular.isDefined(message)) {
                 _success = message;
                 _type = 'warn';
                 _notify(_type, message);
@@ -86,7 +86,7 @@
         };
 
         this.error = function (message) {
-            if (message) {
+            if (angular.isDefined(message)) {
                 _success = message;
                 _type = 'error';
                 _notify(_type, message);
