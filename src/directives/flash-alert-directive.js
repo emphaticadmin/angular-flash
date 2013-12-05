@@ -60,7 +60,7 @@
                     }
                 }
 
-                subscribeHandle = flash.subscribe(show, attr.flashAlert, attr.id);
+                subscribeHandle = flash.subscribe(show, attr.flashAlert, attr.flashId);
 
                 /**
                  * Fixes timing issues: display the last flash message sent before this directive subscribed.
