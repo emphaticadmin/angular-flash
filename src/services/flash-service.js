@@ -107,7 +107,7 @@
         };
 
         this.message = function () {
-            return _type ? _self[_type] : null;
+            return _type ? _self[_type]() : null;
         };
 
         this.classnames = function () {
