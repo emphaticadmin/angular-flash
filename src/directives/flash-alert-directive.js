@@ -10,7 +10,7 @@
         return (/^\s*$/).test(str);
     }
 
-    function flashAlertDirective(flash, $timeout) {
+    function flashAlertDirective(flash, $interval) {
         return {
             scope: true,
             link: function ($scope, element, attr) {
@@ -40,7 +40,7 @@
 
                 function show(message, type) {
                     if (timeoutHandle) {
-                        $timeout.cancel(timeoutHandle);
+                        $interval.cancel(timeoutHandle);
                     }
 
                     $scope.flash.type = type;
@@ -56,7 +56,7 @@
 
                     var delay = Number(attr.duration || 5000);
                     if (delay > 0) {
-                        timeoutHandle = $timeout($scope.hide, delay);
+                        timeoutHandle = $interval($scope.hide, delay, 1);
                     }
                 }
 
@@ -79,6 +79,6 @@
     }
 
     angular.module('angular-flash.flash-alert-directive', ['angular-flash.service'])
-        .directive('flashAlert', ['flash', '$timeout', flashAlertDirective]);
+        .directive('flashAlert', ['flash', '$interval', flashAlertDirective]);
 
 }());
