@@ -1,5 +1,5 @@
 /**! 
- * @license angular-flash v0.1.10
+ * @license angular-flash v0.1.12
  * Copyright (c) 2013 William L. Bunselmeyer. https://github.com/wmluke/angular-flash
  * License: MIT
  */
@@ -67,73 +67,61 @@
             return new Flash(options);
         };
 
-        Object.defineProperty(this, 'success', {
-            get: function () {
-                return _success;
-            },
-            set: function (message) {
+        this.success = function (message) {
+            if (angular.isDefined(message)) {
                 _success = message;
                 _type = 'success';
                 _notify(_type, message);
+            } else {
+                return _success;
             }
-        });
+        };
 
-        Object.defineProperty(this, 'info', {
-            get: function () {
-                return _info;
-            },
-            set: function (message) {
-                _info = message;
+        this.info = function (message) {
+            if (angular.isDefined(message)) {
+                _success = message;
                 _type = 'info';
                 _notify(_type, message);
+            } else {
+                return _info;
             }
-        });
+        };
 
-        Object.defineProperty(this, 'warn', {
-            get: function () {
-                return _warn;
-            },
-            set: function (message) {
-                _warn = message;
+        this.warn = function (message) {
+            if (angular.isDefined(message)) {
+                _success = message;
                 _type = 'warn';
                 _notify(_type, message);
+            } else {
+                return _warn;
             }
-        });
+        };
 
-        Object.defineProperty(this, 'error', {
-            get: function () {
-                return _error;
-            },
-            set: function (message) {
-                _error = message;
+        this.error = function (message) {
+            if (angular.isDefined(message)) {
+                _success = message;
                 _type = 'error';
                 _notify(_type, message);
+            } else {
+                return _error;
             }
-        });
+        };
 
-        Object.defineProperty(this, 'type', {
-            get: function () {
-                return _type;
-            }
-        });
+        this.type = function () {
+            return _type;
+        };
 
-        Object.defineProperty(this, 'message', {
-            get: function () {
-                return _type ? _self[_type] : null;
-            }
-        });
+        this.message = function () {
+            return _type ? _self[_type]() : null;
+        };
 
-        Object.defineProperty(this, 'classnames', {
-            get: function () {
-                return _options.classnames;
-            }
-        });
+        this.classnames = function () {
+            return _options.classnames;
+        };
 
-        Object.defineProperty(this, 'id', {
-            get: function () {
-                return _options.id;
-            }
-        });
+        this.id = function () {
+            return _options.id;
+        };
     };
 
     angular.module('angular-flash.service', [])
@@ -170,7 +158,7 @@
         return (/^\s*$/).test(str);
     }
 
-    function flashAlertDirective(flash, $timeout) {
+    function flashAlertDirective(flash, $interval) {
         return {
             scope: true,
             link: function ($scope, element, attr) {
@@ -192,7 +180,7 @@
                 });
 
                 function removeAlertClasses() {
-                    var classnames = [].concat(flash.classnames.error, flash.classnames.warn, flash.classnames.info, flash.classnames.success);
+                    var classnames = [].concat(flash.classnames().error, flash.classnames().warn, flash.classnames().info, flash.classnames().success);
                     angular.forEach(classnames, function (clazz) {
                         element.removeClass(clazz);
                     });
@@ -200,13 +188,13 @@
 
                 function show(message, type) {
                     if (timeoutHandle) {
-                        $timeout.cancel(timeoutHandle);
+                        $interval.cancel(timeoutHandle);
                     }
 
                     $scope.flash.type = type;
                     $scope.flash.message = message;
                     removeAlertClasses();
-                    angular.forEach(flash.classnames[type], function (clazz) {
+                    angular.forEach(flash.classnames()[type], function (clazz) {
                         element.addClass(clazz);
                     });
 
@@ -216,22 +204,22 @@
 
                     var delay = Number(attr.duration || 5000);
                     if (delay > 0) {
-                        timeoutHandle = $timeout($scope.hide, delay);
+                        timeoutHandle = $interval($scope.hide, delay, 1);
                     }
                 }
 
-                subscribeHandle = flash.subscribe(show, attr.flashAlert, attr.id);
+                subscribeHandle = flash.subscribe(show, attr.flashAlert, attr.flashId);
 
                 /**
                  * Fixes timing issues: display the last flash message sent before this directive subscribed.
                  */
 
-                if (attr.flashAlert && flash[attr.flashAlert]) {
-                    show(flash[attr.flashAlert], attr.flashAlert);
+                if (attr.flashAlert && flash[attr.flashAlert]()) {
+                    show(flash[attr.flashAlert](), attr.flashAlert);
                 }
 
-                if (!attr.flashAlert && flash.message) {
-                    show(flash.message, flash.type);
+                if (!attr.flashAlert && flash.message()) {
+                    show(flash.message(), flash.type());
                 }
 
             }
@@ -239,6 +227,6 @@
     }
 
     angular.module('angular-flash.flash-alert-directive', ['angular-flash.service'])
-        .directive('flashAlert', ['flash', '$timeout', flashAlertDirective]);
+        .directive('flashAlert', ['flash', '$interval', flashAlertDirective]);
 
 }());
